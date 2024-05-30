@@ -5,12 +5,13 @@ import easygui as eg
 Verbose=True
 
 def prompt_start():
-    start_bool = eg.ynbox("Would you like to begin code checks?","Begin Checks", ("Yes", "No"))
-    if start_bool:
-        return True
+    choices = eg.multchoicebox(msg = "Please select all preferred outputs...",choices = ["IO POINTS","PROGRAM NAMES"])
+    start_bool = eg.msgbox(msg="Please select an L5K file...")
+
+    if choices != None:
+        return True,choices
     else:
-        eg.msgbox("Process cancelling...","Exiting...")
-        return False
+        return False,choices
 
 def prompt_input_filepath():
 

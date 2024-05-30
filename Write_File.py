@@ -11,10 +11,10 @@ def write_excel(input_filepath,series: list):
     if Verbose == True:
         print(input_filepath)
     df.to_excel(input_filepath)
-    eg.msgbox(msg="You're file was written to "+input_filepath)
-    os.system(r"'C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE' "+input_filepath)
+    eg.msgbox(msg="Your file was written to "+input_filepath)
 
 def prompt_output_filepath():
+    eg.msgbox(msg="Please select an output folder")
     output_folder = eg.diropenbox(msg="Select Output Folder",title="Output Folder Request")
 
     if output_folder == None:
