@@ -12,7 +12,7 @@ def prompt_start():
         eg.msgbox("Process cancelling...","Exiting...")
         return False
 
-def prompt_filepath():
+def prompt_input_filepath():
 
     input_path = eg.fileopenbox(title = "Select a file", default="*.L5K")
     if input_path == None:
