@@ -20,30 +20,65 @@ def load_file(input_filepath):
 
 def find_IO(content):
     IO = []
-    indexes = []
+    line_nums = []
     for i,x in enumerate(content):
         found = []
         found = re.findall(r"c\w+\[\d+\]",x)
         if len(found) != 0 and found != None:
-            indexes.append(str(i))
-            for j,x in enumerate(found[1:]):
-                indexes.append(str(i)+"_"+str(j+1))
+            line_nums.extend([i]*len(found))
             IO.extend(found)
-    io_used = pd.Series(IO,name="IO Used",index=indexes)
-    return io_used
+    data = {
 
-def find_programs(content):
-    programs = []
-    indexes = []
-    for i,x in enumerate(content):
-        found = []
-        found = re.findall(r"PROGRAM.+\(Description.+,",x)
-        if len(found) != 0 and found != None:
-            indexes.extend([i]*len(found))
-            programs.extend(found)
-    programs_used = pd.Series(programs,name="Program Names",index = indexes)
-    return programs_used
+        "Line Numbers":line_nums,
+        
+        "I/O Ports": IO
+    }
+    df = pd.DataFrame(data)
+    return df
 
+def find_programs(content,existing = None):
+    if type(existing) != pd.DataFrame:
+        programs = []
+        line_nums = []
+        for i,x in enumerate(content):
+            found = []
+            found = re.findall(r"PROGRAM.+\(Description.+,",x)
+            if len(found) != 0 and found != None:
+                line_nums.extend([i]*len(found))
+                programs.extend(found)
+        data = {
+
+            "Line Numbers":line_nums,
+
+            "Program Names":programs
+
+        }
+        df = pd.DataFrame(data)
+        return df
+    else:
+        existing["Program Names"] = ""
+        programs = []
+        indexes = []
+        for i,x in enumerate(content):
+            found = re.search(r"PROGRAM.+\Description.+,",x)
+            if found:
+                found = found.group()
+            if found != None:
+                programs.append(found)
+                indexes.append(i)
+        print("programs")
+        programs.insert(0,"")
+        indexes.append(len(content))
+        pgstart = 0
+        for pgnum,program in list(zip(indexes,programs)):
+
+            print("(PGstart,Pgnum)",pgstart,pgnum)
+            existing.loc[(existing["Line Numbers"]>pgstart) & (existing["Line Numbers"] < pgnum),["Program Names"]]=program
+            
+            pgstart+=int(pgnum)-pgstart
+
+        return existing
+            
 if __name__ == "__main__":
     start_bool = prompt_start()
     if start_bool:

@@ -17,18 +17,19 @@ def main():
     if Verbose == True:
         print("Content = ",to_process)
         
-    excel_out = []
     
     if "IO POINTS" in selections:
-        excel_out.append(find_IO(to_process))
+        df = find_IO(to_process)
     if "PROGRAM NAMES" in selections:
-        excel_out.append(find_programs(to_process))
-    
+        if selections.index("PROGRAM NAMES") == 0:
+            df = find_programs(to_process)
+        else:
+            df = find_programs(to_process,df)
     output_filepath = prompt_output_filepath()
 
     if Verbose == True:
-        print(excel_out)
-    write_excel(fr"{output_filepath}",excel_out)
+        print(df)
+    write_excel(fr"{output_filepath}",df)
     
 
 if __name__ == "__main__":

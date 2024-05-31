@@ -6,8 +6,7 @@ import easygui as eg
 
 Verbose = True
 
-def write_excel(input_filepath,series: list):
-    df = pd.concat(series,axis = 1)
+def write_excel(input_filepath,df):
     if Verbose == True:
         print(input_filepath)
     df.to_excel(input_filepath)

@@ -1,3 +1,7 @@
 V0.0.0
 
 When getting both IO and Program names. Select the index column, do a find and replace and replace (_*) with nothing. The, do a custom sort where it is sorted only by the first column (indexes). Finally highlight the program mixer04 row click F5->Special -> Blanks -> Ok -> = -> up-arrow -> ctrl+enter
+
+V0.0.1
+
+No excel instructions!
