@@ -4,6 +4,8 @@ import pandas as pd
 import os
 import easygui as eg
 
+from CommonError import *
+
 Verbose = True
 
 def write_excel(input_filepath,df):
@@ -17,7 +19,7 @@ def prompt_output_filepath():
     output_folder = eg.diropenbox(msg="Select Output Folder",title="Output Folder Request")
 
     if output_folder == None:
-        eg.msgbox("Process cancelling...","Exiting...")
+        common_error()
         return None
     else:
         if Verbose == True:
@@ -25,7 +27,7 @@ def prompt_output_filepath():
 
     filename = eg.textbox(msg="Enter the name of the file to save",title="Output File Request")
     if filename == None:
-        eg.msgbox("Process cancelling...","Exiting...")
+        common_error()
         return None
     elif filename.endswith(".xlsx"):
         return output_folder + "\\" + filename

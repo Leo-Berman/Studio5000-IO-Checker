@@ -1,5 +1,7 @@
 #!usr/bin/env python3
 
+from CommonError import *
+
 import easygui as eg
 
 Verbose=True
@@ -17,8 +19,7 @@ def prompt_input_filepath():
 
     input_path = eg.fileopenbox(title = "Select a file", default="*.L5K")
     if input_path == None:
-        eg.msgbox("Process cancelling...","Exiting...")
-        return False
+        common_error()
     else:
         if Verbose == True:
             print("Input path = ", input_path)
