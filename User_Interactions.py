@@ -3,7 +3,11 @@ import os
 import easygui as eg
 
 # Error bubble
-def common_error(Reason = ""):
+def common_error(Reason = "",Verbose = False):
+
+    if Verbose == True:
+        print(Reason)
+    
     eg.msgbox(Reason+" Process cancelling...","Exiting...")
     exit()
 
@@ -37,7 +41,11 @@ def prompt_output_filepath(Verbose=False):
         return output_folder + "\\" + filename + ".xlsx"
 
 # Simple msg box wrapper to guide the user
-def prompt(inmsg,intitle,okbtn="ok"):
+def prompt(inmsg,intitle,okbtn="ok",Verbose=False):
+
+    if Verbose == True:
+        print("In message = ",inmsg,"In title = ",intitle,"Ok button = ",okbtn)
+    
     output = eg.msgbox(inmsg,intitle,okbtn)
     if output!=okbtn:
         common_error("Program Exited")

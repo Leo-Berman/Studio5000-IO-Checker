@@ -4,6 +4,7 @@ import easygui as eg
 import pandas as pd
 import re
 
+# perform the data processing
 def do_regex(content,Verbose = False):
 
     # declare lists and dicts for things to go in
@@ -50,7 +51,11 @@ def do_regex(content,Verbose = False):
     # find maximum number of alias length
     max_alias_number = 0
     for x in list(aliases.values()):
-        print(x,len(x))
+
+        # Debugging purposes
+        if Verbose == True:
+            print(x,len(x))
+            
         currlen = len(x)
         max_alias_number = len(x) if currlen > max_alias_number else max_alias_number
 
