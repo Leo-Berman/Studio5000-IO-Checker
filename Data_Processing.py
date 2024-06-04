@@ -18,7 +18,7 @@ def do_regex(content,Verbose = False):
     for i,x in enumerate(content):
 
         # perform regex
-        tmp_program = re.search(r"PROGRAM.+\Description.+,",x)
+        tmp_program = re.search(r'(PROGRAM \w+)(?= \(Description := ".+",)',x)
         tmp_IO = re.findall(r"c\w+\[\d+\]",x)
         tmp_alias =  re.search(r"(\w+) OF (.+\[.+])",x)
 
@@ -51,13 +51,17 @@ def do_regex(content,Verbose = False):
     # find maximum number of alias length
     max_alias_number = 0
     for x in list(aliases.values()):
-
-        # Debugging purposes
-        if Verbose == True:
-            print(x,len(x))
-            
         currlen = len(x)
         max_alias_number = len(x) if currlen > max_alias_number else max_alias_number
+        
+        # Debugging purposes
+        if Verbose == True:
+            if currlen > max_alias_number:
+                print(x,len(x))
+                pass
+            
+    if Verbose == True:
+        print("Maximum number of aliases = ",max_alias_number)
 
     # add columns for the aliases
     for i in range(max_alias_number):
