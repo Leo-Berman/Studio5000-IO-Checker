@@ -19,7 +19,7 @@ def do_regex(content,Verbose = False):
 
         # perform regex
         tmp_program = re.search(r'(PROGRAM \w+)(?= \(Description := ".+",)',x)
-        tmp_IO = re.findall(r"c\w+\[\d+\]",x)
+        tmp_IO = re.findall(r"(?<= )(c\w+\[.+\])",x)
         tmp_alias =  re.search(r"(\w+) OF (.+\[.+])",x)
 
         # if it finds something add it to the appropriate variable (i+1 because python uses 0 indexing)
