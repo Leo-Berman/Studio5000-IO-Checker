@@ -13,7 +13,7 @@ def do_regex(content,Verbose = False):
     programs = [""] # Extra placeholder for IO not in a Program
     programs_pgnums = []
     aliases = {}
-
+    held_program = "N/A"
     # iterate through each line
     for i,x in enumerate(content):
 
@@ -31,14 +31,15 @@ def do_regex(content,Verbose = False):
             IO_pgnums.extend([i+1]*len(tmp_IO))
         if tmp_alias:
             tmp_alias=tmp_alias.group().strip()[1:].split()
-            OF = tmp_alias[2]
+            OF = tmp_alias[2]+"SPLIT"+held_program
             ALIAS = tmp_alias[0]
             if OF not in aliases:
                 aliases[OF] = set()
                 aliases[OF].add(ALIAS)
             else:
                 aliases[OF].add(ALIAS)
-
+        if tmp_program != None:
+            held_program = tmp_program.group()
     # Create dataframe with just IO and their respective Line Numbers
     data = {
 
@@ -48,6 +49,13 @@ def do_regex(content,Verbose = False):
     }
     df = pd.DataFrame(data)
 
+    # add a column for the program names
+    df["Program Names"] = ""
+    pgstart = 0
+    for pgnum,program in list(zip(programs_pgnums,programs)):
+        df.loc[(df["Line Numbers"]>pgstart) & (df["Line Numbers"] < pgnum),["Program Names"]]=program
+        pgstart+=int(pgnum)-pgstart
+    
     # find maximum number of alias length
     max_alias_number = 0
     for x in list(aliases.values()):
@@ -69,15 +77,16 @@ def do_regex(content,Verbose = False):
 
     # fill in rows for aliases
     for x in aliases:
+        split_parts = x.split("SPLIT")
+        alias_part = split_parts[0]
+        program_part = split_parts[1]
+        print(program_part)
         for i,y in enumerate(aliases[x]):
-            df.loc[df["I/O"]==x,["Alias"+str(i)]]=y
+            
+            
+            df.loc[(df["I/O"]==alias_part) &(df["Program Names"]==program_part),["Alias"+str(i)]]=y
     
-    # add a column for the program names
-    df["Program Names"] = ""
-    pgstart = 0
-    for pgnum,program in list(zip(programs_pgnums,programs)):
-        df.loc[(df["Line Numbers"]>pgstart) & (df["Line Numbers"] < pgnum),["Program Names"]]=program
-        pgstart+=int(pgnum)-pgstart
+    
 
     return df
     
