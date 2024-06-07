@@ -62,14 +62,8 @@ def do_regex(content,Verbose = False):
         currlen = len(x)
         max_alias_number = len(x) if currlen > max_alias_number else max_alias_number
         
-        # Debugging purposes
-        if Verbose == True:
-            if currlen > max_alias_number:
-                print(x,len(x))
-                pass
-            
-    if Verbose == True:
-        print("Maximum number of aliases = ",max_alias_number)
+
+        
 
     # add columns for the aliases
     for i in range(max_alias_number):
@@ -80,7 +74,6 @@ def do_regex(content,Verbose = False):
         split_parts = x.split("SPLIT")
         alias_part = split_parts[0]
         program_part = split_parts[1]
-        print(program_part)
         for i,y in enumerate(aliases[x]):
             
             
