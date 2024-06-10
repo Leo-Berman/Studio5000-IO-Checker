@@ -19,7 +19,7 @@ def do_regex(content,Verbose = False):
     for i,x in enumerate(content):
 
         # perform regex
-        tmp_program = re.search(r'(PROGRAM \w+)(?= \(Description := ".+",)',x)
+        tmp_program = re.search(r'(PROGRAM \w+)((?= \((Description) := .+,)|(?= \((MODE) := .+,)|(?= \((MAIN) := .+,))',x)
         tmp_IO = re.findall(r"(?<= )(c\w+\[.+\])",x)
         tmp_alias =  re.search(r"(\w+) OF (.+\[.+])",x)
 
@@ -31,7 +31,7 @@ def do_regex(content,Verbose = False):
             IO.extend(tmp_IO)
             IO_pgnums.extend([i+1]*len(tmp_IO))
         if tmp_alias:
-            tmp_alias=tmp_alias.group().strip()[1:].split()
+            tmp_alias=tmp_alias.group().strip().split()
             OF = tmp_alias[2]+"SPLIT"+held_program
             ALIAS = tmp_alias[0]
             if OF not in aliases:

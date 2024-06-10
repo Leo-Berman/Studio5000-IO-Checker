@@ -9,8 +9,8 @@ def load_file(input_filepath,Verbose=False):
     content = file.readlines()
 
     # Iterate through and convert to unicode
-    for i,x in enumerate(content):
-        content[i] = str(x.encode('utf-8'))
+    #for i,x in enumerate(content):
+    #    content[i] = str(x.encode('utf-8'))
 
     # Close the file
     file.close()

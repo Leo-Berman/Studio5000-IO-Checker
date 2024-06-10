@@ -1,0 +1,19 @@
+	PROGRAM aa_GlobalCode (MODE := 0,
+	                       DisableFlag := 0,
+	                       UseAsFolder := 1)
+		TAG
+		END_TAG
+
+		CHILD_PROGRAMS
+				FirstScan;
+				Alarms;
+				Campaign;
+				Global;
+				Reporting;
+				Unit;
+				Historian;
+				Line;
+				BlankPhase;
+		END_CHILD_PROGRAMS
+
+	END_PROGRAM
