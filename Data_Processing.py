@@ -43,7 +43,9 @@ def do_regex(content,Verbose = False):
             held_program = tmp_program.group()
 
         if "END_PROGRAM" in x:
-            tmp_program = None
+            programs.append("")
+            programs_pgnums.append(i+1)
+            held_program = ""
     # Create dataframe with just IO and their respective Line Numbers
     data = {
 
