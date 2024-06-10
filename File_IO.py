@@ -1,40 +1,23 @@
+# Import custom  libraries ( and pandas )
 import User_Interactions as UI
 import pandas as pd
 
-# Load the file into memory
-def load_file(input_filepath,Verbose=False):
+# return contents of file, if empty, exit
+def load_file(input_filepath):
 
     # Read the file in with proper encoding
     file = open(input_filepath,"r",encoding='UTF8')
     content = file.readlines()
-
-    # Iterate through and convert to unicode
-    #for i,x in enumerate(content):
-    #    content[i] = str(x.encode('utf-8'))
-
-    # Close the file
     file.close()
-
-    if Verbose == True:
-        print(content)
     
-    # If file was empty, abort
+    # If file was empty, abort, Otherwise return the contents of the file
     if content == None:
          UI.common_error("File was Empty")
-
-    # Otherwise return the contents of the file
     else:
         return content
 
-# Output info from processed L5K file
-def write_excel(input_filepath,df,Verbose = False):
+def write_excel(input_filepath,df):
 
-    # Debugging purposes
-    if Verbose == True:
-        print(input_filepath)
-
-    # Write the excel file
+    # Write the excel file & tell the user their job was complete
     df.to_excel(input_filepath,index=False)
-
-    # Tell the user their job was complete
     UI.prompt("Your file was written to "+input_filepath,"End screen")

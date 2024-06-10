@@ -1,10 +1,17 @@
-#!usr/bin/env python3
-
+# import libraries
 import easygui as eg
 import pandas as pd
 import re
 
-# perform the data processing
+'''
+Go through file and collect:
+    all IO points
+    their page numbers
+    affiliated program
+    and aliases used within that program
+
+Returns a pandas DataFrame
+'''
 def do_regex(content,Verbose = False):
 
     # declare lists and dicts for things to go in
@@ -15,10 +22,15 @@ def do_regex(content,Verbose = False):
     aliases = {}
     held_program = "N/A"
 
-    # iterate through each line
+    # iterate through each line in L5K file
     for i,x in enumerate(content):
 
-        # perform regex
+        '''
+        Use regular expression matching to check the line for:
+            A new program
+            An IO point
+            An alias
+        '''
         tmp_program = re.search(r'(PROGRAM \w+)((?= \((Description) := .+,)|(?= \((MODE) := .+,)|(?= \((MAIN) := .+,))',x)
         tmp_IO = re.findall(r"(?<= )(c\w+\[.+\])",x)
         tmp_alias =  re.search(r"(\w+) OF (.+\[.+])",x)
@@ -31,21 +43,31 @@ def do_regex(content,Verbose = False):
             IO.extend(tmp_IO)
             IO_pgnums.extend([i+1]*len(tmp_IO))
         if tmp_alias:
+
+            # split alias into actual IO point, and what the alias is of that IO point
             tmp_alias=tmp_alias.group().strip().split()
+
+            # This lets us identy by IO and program later on
             OF = tmp_alias[2]+"SPLIT"+held_program
+
+            # Adds the alias into a dictionary using the IO and program as a key
             ALIAS = tmp_alias[0]
             if OF not in aliases:
                 aliases[OF] = set()
                 aliases[OF].add(ALIAS)
             else:
                 aliases[OF].add(ALIAS)
+
+        # if there is a new program, save it to be used until the end of the program
         if tmp_program != None:
             held_program = tmp_program.group()
 
+        # If the program ends, clear out the held_program, and make the current program ""
         if "END_PROGRAM" in x:
             programs.append("")
             programs_pgnums.append(i+1)
             held_program = ""
+
     # Create dataframe with just IO and their respective Line Numbers
     data = {
 
@@ -57,16 +79,18 @@ def do_regex(content,Verbose = False):
 
     # add a column for the program names
     df["Program Names"] = ""
+
+    # iterate through and check using page numbers which IO point belongs to which program
     pgstart = 0
     for pgnum,program in list(zip(programs_pgnums,programs)):
         df.loc[(df["Line Numbers"]>pgstart) & (df["Line Numbers"] < pgnum),["Program Names"]]=program
         pgstart+=int(pgnum)-pgstart
     
-    # find maximum number of alias length
+    # find maximum number of alias length so we know how many colums to add
     max_alias_number = 0
     for x in list(aliases.values()):
         currlen = len(x)
-        max_alias_number = len(x) if currlen > max_alias_number else max_alias_number
+        max_alias_number = currlen if currlen > max_alias_number else max_alias_number
         
 
         
@@ -86,6 +110,6 @@ def do_regex(content,Verbose = False):
             df.loc[(df["I/O"]==alias_part) &(df["Program Names"]==program_part),["Alias"+str(i)]]=y
     
     
-
+    # return the dataframe
     return df
     
