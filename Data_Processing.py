@@ -14,6 +14,7 @@ def do_regex(content,Verbose = False):
     programs_pgnums = []
     aliases = {}
     held_program = "N/A"
+
     # iterate through each line
     for i,x in enumerate(content):
 
@@ -40,6 +41,9 @@ def do_regex(content,Verbose = False):
                 aliases[OF].add(ALIAS)
         if tmp_program != None:
             held_program = tmp_program.group()
+
+        if "END_PROGRAM" in x:
+            tmp_program = None
     # Create dataframe with just IO and their respective Line Numbers
     data = {
 

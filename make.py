@@ -1,7 +1,7 @@
 import subprocess
 
 def main():
-    subprocess.call(r"python -m PyInstaller --onefile L5K_Processor.py")
+    subprocess.call(r"python -m PyInstaller --onefile Get_IO.py")
 
 
 
