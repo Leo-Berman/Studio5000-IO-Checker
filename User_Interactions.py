@@ -2,6 +2,18 @@ import pandas as pd
 import os
 import easygui as eg
 
+def test_valid_filename(inname):
+    invalid_chars = ['<','>',':','"','/','\\','|','?','*',]
+    for x in invalid_chars:
+        if inname.__contains__(x):
+            return False
+
+    for i in range(32):
+        if inname.__contains__(chr(i)):
+            return False
+
+    return True
+            
 # Error bubble
 def common_error(Reason = "",Verbose = False):
 
@@ -34,8 +46,12 @@ def prompt_output_filepath(Verbose=False):
     if filename == None:
         common_error("No Filename")
 
+    while test_valid_filename(filename) == False:
+        filename = eg.textbox(msg="You entered a filename with invalid characters, please try again",title="Output File Request Try Again")
+        if filename == None:
+            common_error("No Filename")
     # Otherwise make sure the file has the correct extension
-    elif filename.endswith(".xlsx"):
+    if filename.endswith(".xlsx"):
         return output_folder + "\\" + filename
     else:
         return output_folder + "\\" + filename + ".xlsx"
